@@ -29,7 +29,8 @@ const addValidationContacts = (req, res, next) => {
         email: Joi.string()
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
         phone: Joi.string().required(),
-        favorite: Joi.boolean()
+        favorite: Joi.boolean(),
+        subscription: Joi.string()
     });
 
     const validationSchemaJoi = addSchema.validate(req.body);
@@ -42,7 +43,6 @@ const addValidationContacts = (req, res, next) => {
 
 const validateToggleFavorite = (req, res, next) => {
     const addSchema = Joi.object({
-
         favorite: Joi.boolean().required()
     });
 
@@ -54,7 +54,9 @@ const validateToggleFavorite = (req, res, next) => {
     next();
 };
 
+
 module.exports = {
     addValidationContacts,
-    validateToggleFavorite
+    validateToggleFavorite,
+
 }

@@ -10,7 +10,13 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
 app.use(cors())
-app.use(express.json())
+app.use(express.json());
+
+const routerUsers = require('./routes/api/users');
+app.use('/api/users', routerUsers);
+
+const routerCurrent = require("./routes/api/current");
+app.use("/api/users", routerCurrent)
 
 const routerApi = require('./routes/api/contacts');
 app.use('/api/contacts', routerApi);

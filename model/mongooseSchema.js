@@ -1,5 +1,4 @@
-const  {Schema, model} = require("mongoose");
-
+const { Schema, model } = require("mongoose");
 
 const contactsSchema = Schema({
     name: {
@@ -18,11 +17,15 @@ const contactsSchema = Schema({
     favorite: {
         type: Boolean,
         default: false,
-    },
+    },    
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    }
 });
 
 const Contact = model('contact', contactsSchema);
 
+module.exports = { Contact };
 
-module.exports = {Contact};
-   
