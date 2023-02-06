@@ -54,7 +54,6 @@ const validateToggleFavorite = (req, res, next) => {
     next();
 };
 
-
 module.exports = {
     addValidationContacts,
     validateToggleFavorite,
