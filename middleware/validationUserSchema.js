@@ -9,7 +9,7 @@ const validationUser = (req, res, next) => {
             .max(30)
             .required(),
         email: Joi.string()
-            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
         subscription: Joi.string(),
         token: Joi.string()
     });

@@ -8,15 +8,16 @@ const signup = async (req, res, next) => {
     // console.log(req.body)
     try {
         const { email, password } = req.body;
-        // console.log(req.body)
         const user = await User.findOne({ email });
         if (user) {
             throw new Conflict("$Email in use")
         }
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
         const result = await User.create({ email, password: hashPassword });
-        // console.log(result)
-        res.status(201).json(result)
+        res.status(201).json({
+            email,
+            subscription: result.subscription
+        })
     } catch (error) {
         next(error)
     }
@@ -38,7 +39,7 @@ const login = async (req, res, next) => {
             id: user._id,
         };
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
-         await User.findByIdAndUpdate(user._id, {token})       
+        await User.findByIdAndUpdate(user._id, { token })
         return res.status(200).json({ token })
     } catch (error) {
         next(error)
@@ -54,26 +55,26 @@ const getCurrent = async (req, res) => {
     })
 };
 
-const logout = async(req, res) => {
-const {_id} = req.user;
-await User.findByIdAndUpdate(_id, {token: null});
-res.status(204).json();
+const logout = async (req, res) => {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: null });
+    res.status(204).json();
 };
 
-const updateSubscription = async(req, res) => {
+const updateSubscription = async (req, res) => {
     try {
-        const {_id, email} = req.user;
-      const {subscription} = req.body;
-      await User.findByIdAndUpdate(_id, {subscription}, { new: true });         
-      return res.status(200).json({
+        const { _id, email } = req.user;
+        const { subscription } = req.body;
+        await User.findByIdAndUpdate(_id, { subscription }, { new: true });
+        return res.status(200).json({
             email,
-            subscription            
+            subscription
         })
-    
+
     } catch (error) {
-        
+
     }
-  }
+}
 
 module.exports = {
     signup,

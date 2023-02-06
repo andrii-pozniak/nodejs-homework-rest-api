@@ -13,12 +13,12 @@ app.use(cors())
 app.use(express.json());
 
 const routerUsers = require('./routes/api/users');
-app.use('/api/users', routerUsers);
-
 const routerCurrent = require("./routes/api/current");
-app.use("/api/users", routerCurrent)
+
+app.use("/api/users", routerCurrent, routerUsers)
 
 const routerApi = require('./routes/api/contacts');
+
 app.use('/api/contacts', routerApi);
 
 app.use((_, res, __) => {

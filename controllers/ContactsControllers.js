@@ -2,7 +2,7 @@ const { Contact } = require('../model/mongooseSchema');
 
 const getAll = async (req, res, next) => {
   try {
-    let contacts = null;
+    let contacts;
     const { _id } = req.user;
     const { page = 1, limit = 5, favorite } = req.query;
     const skip = (page - 1) * limit;
