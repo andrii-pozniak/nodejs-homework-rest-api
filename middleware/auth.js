@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
             });
         };
 
-        const {id} = jwt.verify(token, SECRET_KEY);        
+        const { id } = jwt.verify(token, SECRET_KEY);
         const user = await User.findById(id);
         if (!user || user.token !== token) {
             return res.status(401).json({
