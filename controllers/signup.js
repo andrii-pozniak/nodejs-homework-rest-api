@@ -18,7 +18,7 @@ const signup = async (req, res, next) => {
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
         const avatarURL = gravatar.url(email);
         const result = await User.create({ email, password: hashPassword, avatarURL });
-        console.log(result)
+        
         res.status(201).json({
             email,
             subscription: result.subscription,
@@ -88,14 +88,13 @@ const updateAvatar = async (req, res) => {
     const { path: tempUpload, originalname } = req.file;
     const { _id: id } = req.user;
     const imageName = `${id}_${originalname}`
-
     try {
 
         const resultUpdate = path.join(avatarDir, imageName);
 
         await fs.rename(tempUpload, resultUpdate);
-        const avatarURL = path.join("public", "avatars", imageName);
-        console.log(imageName)
+        const avatarURL = path.join( "avatars", imageName);
+        
         await User.findByIdAndUpdate(req.user._id, { avatarURL });
         res.json({ avatarURL });
 

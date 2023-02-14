@@ -1,7 +1,7 @@
 const express = require('express');
 const ctrlUsers = require("../../controllers/signup");
 const { auth } = require("../../middleware/auth");
-const { upload } = require("../../middleware/multerConfig");
+const upload = require("../../middleware/multerConfig");
 
 const { validationUser, validateToggleSubscription } = require("../../middleware/validationUserSchema");
 
