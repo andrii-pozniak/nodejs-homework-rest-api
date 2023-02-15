@@ -1,7 +1,5 @@
 const Joi = require('joi');
 
-
-
 const validationUser = (req, res, next) => {
     const userSchema = Joi.object({
         password: Joi.string()
