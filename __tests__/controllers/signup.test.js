@@ -30,16 +30,10 @@ describe("test signup controller", () => {
         const response = await request(app)
             .post("/api/users/signup")
             .send({ email: "andrii@gmail.com", password: "111111" });
-        console.log(response.status)
         expect(response.status).toEqual(201)
         const { email, subscription } = response.body
         expect(typeof email).toBe("string");
         expect(typeof subscription).toBe("string");
-        // console.log("status", response.status)
-
-
-        console.log(email, subscription)
-
 
     })
 
