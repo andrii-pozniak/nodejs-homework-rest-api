@@ -7,7 +7,6 @@ const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
 
-
 const signup = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -84,7 +83,7 @@ const updateSubscription = async (req, res) => {
 
 const avatarDir = path.join(__dirname, "../", "public", "avatars")
 const updateAvatar = async (req, res) => {
-
+    const HOST = "http://localhost:3000";
     const { path: tempUpload, originalname } = req.file;
     const { _id: id } = req.user;
     const imageName = `${id}_${originalname}`
@@ -93,7 +92,7 @@ const updateAvatar = async (req, res) => {
         const resultUpdate = path.join(avatarDir, imageName);
 
         await fs.rename(tempUpload, resultUpdate);
-        const avatarURL = path.join( "/avatars", imageName);
+        const avatarURL =  `${HOST}/avatars/${imageName}`;
         console.log(avatarURL)
         await User.findByIdAndUpdate(req.user._id, { avatarURL });
         res.json({ avatarURL });
