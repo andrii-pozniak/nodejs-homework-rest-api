@@ -19,7 +19,7 @@ const validationUser = (req, res, next) => {
 };
 
 const validateToggleSubscription = (req, res, next) => {
-        const addSchema = Joi.object({
+    const addSchema = Joi.object({
         subscription: Joi.valid("starter", "pro", "business").required()
     });
     const validationSchemaJoi = addSchema.validate(req.body);
@@ -30,8 +30,23 @@ const validateToggleSubscription = (req, res, next) => {
     next();
 };
 
+const validationVerifyEmail = (req, res, next) => {
+    const verifySchema = Joi.object({
+        email: Joi.string()
+            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+
+    });
+    const verifyEmail = verifySchema.validate(req.body);
+    if (verifyEmail.error) {
+        return res.status(400).json({ message: "Invalid subscription field" });
+    }
+
+    next();
+}
+
 module.exports = {
     validationUser,
-    validateToggleSubscription
+    validateToggleSubscription,
+    validationVerifyEmail
 }
 

@@ -6,6 +6,8 @@ const { SECRET_KEY } = process.env;
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
+const { sendEmail } = require("../helpers/sendEmail");
+const { v4: uuidv4 } = require('uuid');
 
 const signup = async (req, res, next) => {
     try {
@@ -16,8 +18,14 @@ const signup = async (req, res, next) => {
         }
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
         const avatarURL = gravatar.url(email);
-        const result = await User.create({ email, password: hashPassword, avatarURL });
-        
+        const verificationToken = uuidv4();
+        const result = await User.create({ email, password: hashPassword, avatarURL, verificationToken });
+        const mail = {
+            to: email,
+            subject: "website registration confirmation",
+            html: `<a href="localhost:3000/api/users/verify/${verificationToken}">click to confirm registration</a>`
+        }
+        await sendEmail(mail);
         res.status(201).json({
             email,
             subscription: result.subscription,
@@ -55,7 +63,7 @@ const getCurrent = async (req, res) => {
     const { email } = req.user;
     res.status(200).json({
         data: {
-            user: {  email }
+            user: { email }
         }
     })
 };
@@ -92,7 +100,7 @@ const updateAvatar = async (req, res) => {
         const resultUpdate = path.join(avatarDir, imageName);
 
         await fs.rename(tempUpload, resultUpdate);
-        const avatarURL =  `${HOST}/avatars/${imageName}`;
+        const avatarURL = `${HOST}/avatars/${imageName}`;
         console.log(avatarURL)
         await User.findByIdAndUpdate(req.user._id, { avatarURL });
         res.json({ avatarURL });
@@ -103,11 +111,52 @@ const updateAvatar = async (req, res) => {
     }
 };
 
+const verifyEmail = async (req, res) => {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+    if (!user) {
+        return res.status(404).json({
+            massage: "User not found"
+        })
+    }
+    await User.findByIdAndUpdate(user.id, { verify: true, verificationToken: "" });
+    res.status(200).json({
+        massage: 'Verification successful'
+    })
+};
+
+const resendVerifyEmail = async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(400).json({
+            massage: "missing required field email"
+        });
+    };
+    if (user.verify) {
+        return res.status(400).json({
+            massage: "Verification has already been passed"
+        });
+    }
+    const mail = {
+        to: email,
+        subject: "website registration confirmation",
+        html: `<a href="localhost:3000/api/users/verify/${user.verificationToken}">click to confirm registration</a>`
+    }
+    await sendEmail(mail);
+    res.json({
+        massage: "Email verify send"
+    })
+}
+
 module.exports = {
     signup,
     login,
     getCurrent,
     logout,
     updateSubscription,
-    updateAvatar
+    updateAvatar,
+    verifyEmail,
+    resendVerifyEmail
+
 };
