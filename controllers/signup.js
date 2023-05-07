@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const signup = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       throw new Conflict("$Email in use");
@@ -20,7 +20,7 @@ const signup = async (req, res, next) => {
     const avatarURL = gravatar.url(email);
     const verificationToken = uuidv4();
     const result = await User.create({
-      name,
+     
       email,
       password: hashPassword,
       avatarURL,
