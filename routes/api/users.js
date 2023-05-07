@@ -7,7 +7,7 @@ const {
   validationRegister,
   validationUser,
   validateToggleSubscription,
-  validationVerifyEmail,
+  // validationVerifyEmail,
 } = require("../../middleware/validationUserSchema");
 
 const router = express.Router();
@@ -16,7 +16,7 @@ router.post("/signup", validationRegister, ctrlUsers.signup);
 
 router.post("/login", validationUser, ctrlUsers.login);
 
-router.post("/verify", validationVerifyEmail, ctrlUsers.resendVerifyEmail);
+// router.post("/verify", validationVerifyEmail, ctrlUsers.resendVerifyEmail);
 
 router.get("/logout", auth, ctrlUsers.logout);
 
