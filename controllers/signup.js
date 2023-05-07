@@ -35,6 +35,7 @@ const signup = async (req, res, next) => {
     res.status(201).json({
       name,
       email,
+      token,
       subscription: result.subscription,
       avatarURL,
     });
