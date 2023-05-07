@@ -6,7 +6,6 @@ const { SECRET_KEY } = process.env;
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
-// const { sendEmail } = require("../helpers/sendEmail");
 const { v4: uuidv4 } = require("uuid");
 
 const signup = async (req, res, next) => {
@@ -26,13 +25,9 @@ const signup = async (req, res, next) => {
       avatarURL,
       verificationToken,
     });
-    // const mail = {
-    //   to: email,
-    //   subject: "website registration confirmation",
-    //   html: `<a href="http//rest-api-a3zm.onrender.com/api/users/verify/${verificationToken}">click to confirm registration</a>`,
-    // };
-    // await sendEmail(mail);
+
     res.status(201).json({
+      name,
       email,
       subscription: result.subscription,
       avatarURL,
@@ -129,29 +124,7 @@ const verifyEmail = async (req, res) => {
   });
 };
 
-// const resendVerifyEmail = async (req, res) => {
-//   const { email } = req.body;
-//   const user = await User.findOne({ email });
-//   if (!user) {
-//     return res.status(400).json({
-//       massage: "missing required field email",
-//     });
-//   }
-//   if (user.verify) {
-//     return res.status(400).json({
-//       massage: "Verification has already been passed",
-//     });
-//   }
-//   const mail = {
-//     to: email,
-//     subject: "website registration confirmation",
-//     html: `<a href="localhost:3000/api/users/verify/${user.verificationToken}">click to confirm registration</a>`,
-//   };
-//   await sendEmail(mail);
-//   res.json({
-//     massage: "Email verify send",
-//   });
-// };
+
 
 module.exports = {
   signup,
@@ -161,5 +134,4 @@ module.exports = {
   updateSubscription,
   updateAvatar,
   verifyEmail,
-  // resendVerifyEmail,
 };
