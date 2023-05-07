@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const validationRegister = (req, res, next) => {
   const userSchema = Joi.object({
-    name: Joi.string(),
+    name: Joi.string().optional(),
     password: Joi.string().min(3).max(30).required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
