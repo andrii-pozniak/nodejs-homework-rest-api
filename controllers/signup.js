@@ -18,11 +18,17 @@ const signup = async (req, res, next) => {
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const avatarURL = gravatar.url(email);
     const verificationToken = uuidv4();
+    const payload = {
+      id: user._id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
+    await User.findByIdAndUpdate(user._id, { token });
     const result = await User.create({
       name,
       email,
       password: hashPassword,
       avatarURL,
+      token,
       verificationToken,
     });
 
