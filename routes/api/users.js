@@ -4,6 +4,7 @@ const { auth } = require("../../middleware/auth");
 const upload = require("../../middleware/multerConfig");
 
 const {
+  validationRegister,
   validationUser,
   validateToggleSubscription,
   validationVerifyEmail,
@@ -11,7 +12,7 @@ const {
 
 const router = express.Router();
 
-router.post("/signup", validationUser, ctrlUsers.signup);
+router.post("/signup", validationRegister, ctrlUsers.signup);
 
 router.post("/login", validationUser, ctrlUsers.login);
 
