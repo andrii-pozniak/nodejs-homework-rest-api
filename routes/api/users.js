@@ -16,7 +16,7 @@ router.post("/signup", validationRegister, ctrlUsers.signup);
 router.post("/login", validationUser, ctrlUsers.login);
 
 
-router.get("/logout", auth, ctrlUsers.logout);
+router.post("/logout", auth, ctrlUsers.logout);
 
 router.get("/verify/:verificationToken", ctrlUsers.verifyEmail);
 
