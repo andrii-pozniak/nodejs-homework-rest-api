@@ -47,7 +47,6 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       throw new Unauthorized(`"${email} is wrong"`);
     }
@@ -60,7 +59,7 @@ const login = async (req, res, next) => {
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
     await User.findByIdAndUpdate(user._id, { token });
-    return res.status(200).json({ token }, user.name);
+    return res.status(200).json( {token} );
   } catch (error) {
     next(error);
   }
