@@ -83,10 +83,11 @@ const logout = async (req, res) => {
 const updateSubscription = async (req, res) => {
   try {
     const { _id, email } = req.user;
-    const { subscription } = req.body;
+    const { subscription, name } = req.body;
     await User.findByIdAndUpdate(_id, { subscription }, { new: true });
     return res.status(200).json({
       email,
+      name,
       subscription,
     });
   } catch (error) {}
